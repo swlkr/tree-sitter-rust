@@ -151,6 +151,82 @@ ok! {
       (line_comment)
       (block_comment))))
 
+
+================================================================================
+ Simple RSX elements
+================================================================================
+
+html! {
+  <div className="b" tabIndex="1" />
+  <div>a <span>b</span> c</div>
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (macro_invocation
+   (identifier)
+   (token_tree
+     (rsx_self_closing_element
+       (identifier)
+       (rsx_attribute
+         (identifier)
+         (string_literal))
+       (rsx_attribute
+         (identifier)
+         (string_literal)))
+     (rsx_element
+       (rsx_opening_element
+         (identifier))
+       (rsx_text)
+       (rsx_element
+        (rsx_opening_element
+           (identifier))
+         (rsx_text)
+         (rsx_closing_element
+           (identifier)))
+       (rsx_text)
+       (rsx_closing_element
+         (identifier))))))
+
+==============================================
+Expressions within RSX elements
+==============================================
+
+html! {
+  <a b c={d}> e {f} g </a>
+  <i>{j}</i>
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (macro_invocation
+    (identifier)
+    (token_tree
+      (rsx_element
+        (rsx_opening_element
+          (identifier)
+          (rsx_attribute
+            (identifier))
+          (rsx_attribute
+            (identifier)
+            (rsx_expression
+              (identifier))))
+        (rsx_text)
+        (rsx_expression
+          (identifier))
+        (rsx_text)
+        (rsx_closing_element
+          (identifier)))
+      (rsx_element
+        (rsx_opening_element
+          (identifier))
+        (rsx_expression
+          (identifier))
+        (rsx_closing_element
+          (identifier))))))
+
 ================================================================================
 Macro definition
 ================================================================================

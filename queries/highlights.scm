@@ -153,3 +153,8 @@
 "*" @operator
 "&" @operator
 "'" @operator
+
+(rsx_opening_element) @keyword
+(rsx_closing_element) @keyword
+(rsx_self_closing_element) @keyword
+(rsx_attribute) @variable

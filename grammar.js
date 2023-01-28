@@ -900,6 +900,60 @@ module.exports = grammar({
     _delim_tokens: $ => choice(
       $._non_delim_token,
       alias($.delim_token_tree, $.token_tree),
+      $.rsx_element,
+      $.rsx_self_closing_element
+    ),
+
+    rsx_element: $ => seq(
+       $.rsx_opening_element,
+       repeat(choice(
+         $.rsx_element,
+         $.rsx_self_closing_element,
+         $.rsx_expression,
+         $.rsx_text
+       )),
+       $.rsx_closing_element
+     ),
+
+    rsx_text: $ => /[^{}<>]+/,
+
+    rsx_expression: $ => seq(
+      '{',
+      choice($._expression),
+      '}'
+    ),
+
+    rsx_opening_element: $ => seq(
+      '<',
+      $.identifier,
+      repeat($.rsx_attribute),
+      '>'
+    ),
+
+    rsx_closing_element: $ => seq(
+      '<',
+      '/',
+      $.identifier,
+      '>'
+    ),
+
+    rsx_self_closing_element: $ => seq(
+      '<',
+      $.identifier,
+      repeat($.rsx_attribute),
+      '/',
+      '>'
+    ),
+
+    rsx_attribute: $ => seq(
+      $.identifier,
+      optional(seq(
+        '=',
+        choice(
+          $.string_literal,
+          $.rsx_expression
+        )
+      ))
     ),
 
     // Should match any token other than a delimiter.
